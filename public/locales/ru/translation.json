@@ -1,0 +1,9 @@
+{
+  "home": {
+    "projectName": "unhack",
+    "welcomeMessage": "Рады видеть вас на нашей платформе!",
+    "welcomeDescription": "доп инфа к приветствию",
+    "goToMain": "Главная",
+    "goToAbout": "О проекте"
+  }
+}

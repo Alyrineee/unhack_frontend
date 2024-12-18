@@ -10,8 +10,8 @@ const LanguageSwitcher = () => {
 
   return (
     <div className="flex gap-2">
-      <button onClick={() => changeLanguage('en')} className="btn">EN</button>
-      <button onClick={() => changeLanguage('ru')} className="btn">RU</button>
+      <button onClick={() => changeLanguage('en')} className="btn select-none">EN</button>
+      <button onClick={() => changeLanguage('ru')} className="btn select-none">RU</button>
     </div>
   );
 };

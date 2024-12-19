@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import ResetPassword from "./pages/ResetPassword";
 import ArticlesList from "./pages/ArticlesList";
 import HackathonsList from "./pages/HackathonsList";
+import HackathonView from "./pages/HackathonView";
 
 const AppRoutes = () => (
   <Router>
@@ -22,6 +23,7 @@ const AppRoutes = () => (
       <Route path="/about" element={<About />} />
       <Route path="/articles" element={<ArticlesList />} />
       <Route path="/hackathons" element={<HackathonsList />} />
+      <Route path="/hackathons/:id" element={<HackathonView />} />
     </Routes>
   </Router>
 );

@@ -10,6 +10,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ArticlesList from "./pages/ArticlesList";
 import HackathonsList from "./pages/HackathonsList";
 import HackathonView from "./pages/HackathonView";
+import ArticleView from "./pages/ArticleView";
 
 const AppRoutes = () => (
   <Router>
@@ -24,6 +25,7 @@ const AppRoutes = () => (
       <Route path="/articles" element={<ArticlesList />} />
       <Route path="/hackathons" element={<HackathonsList />} />
       <Route path="/hackathons/:id" element={<HackathonView />} />
+      <Route path="/articles/:id" element={<ArticleView />} />
     </Routes>
   </Router>
 );

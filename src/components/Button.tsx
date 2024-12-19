@@ -13,7 +13,7 @@ export const Button = ({ text, onClick, variant = "primary" }: ButtonProps) => {
       : "bg-gray-200 text-black hover:bg-gray-300";
 
   return (
-    <button onClick={onClick} className={`${baseStyle} ${styles}`}>
+    <button onClick={onClick} className={`${baseStyle} ${styles}`} type="button">
       {text}
     </button>
   );

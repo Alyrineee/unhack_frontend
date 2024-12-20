@@ -16,7 +16,7 @@ interface Article {
 const ArticleView = () => {
   const { id } = useParams(); // Получаем ID статьи из URL
 
-  const [article, setArticle] = useState<Article>([]);
+  const [article, setArticle] = useState<Article>(0);
 
   useEffect(() => {
     apiClient.get("api/articles/"+id)

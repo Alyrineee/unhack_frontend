@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Создаём экземпляр axios
 const apiClient = axios.create({
-  baseURL: "http://212.22.90.46:8000", // Укажите URL бэкенда
+  baseURL: "http://127.0.0.1:8000/", // Укажите URL бэкенда
   headers: {
     "Content-Type": "application/json",
   },

@@ -19,7 +19,7 @@ const Profile = () => {
         apiClient.get("/api/user/")
             .then((response)=> setProfile(response.data))
             .catch((error)=> console.log(error));
-    })
+    }, [])
   return (
     <div className="flex flex-col min-h-screen bg-white text-black">
 

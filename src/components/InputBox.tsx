@@ -2,21 +2,22 @@ interface InputBoxProps {
     type: string;
     placeholder: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-export const InputBox: React.FC<InputBoxProps> = ({ type, placeholder, onChange }) => {
+    error?: string; // Новое свойство для отображения ошибок
+  }
+  
+  export const InputBox: React.FC<InputBoxProps> = ({ type, placeholder, onChange, error }) => {
     return (
+      <div className="mb-4">
         <input
-            className="w-full p-4 border rounded-lg text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-purple-600"
-            type={type}
-            placeholder={placeholder}
-            onChange={onChange}
-            style={{
-                padding: "10px",
-                margin: "10px 0",
-                width: "100%",
-                fontSize: "16px",
-            }}
+          className={`w-full p-4 border rounded-lg text-sm md:text-base focus:outline-none ${
+            error ? "border-red-500" : "border-gray-300"
+          } focus:ring-2 ${error ? "focus:ring-red-500" : "focus:ring-purple-600"}`}
+          type={type}
+          placeholder={placeholder}
+          onChange={onChange}
         />
+        {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+      </div>
     );
-};
+  };
+  

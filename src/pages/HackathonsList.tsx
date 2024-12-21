@@ -11,6 +11,7 @@ interface Hackathon {
   date_of_start: string;
   date_of_end: string;
   place: string;
+  unique_link: string;
 }
 
 

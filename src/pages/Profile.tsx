@@ -27,13 +27,6 @@ const Profile = () => {
 
       <div className="container mx-auto p-4 md:p-8">
         <ProfileInfo nickname={profile?.nickname}/>
-
-        <div className="mt-8">
-          <h2 className="text-3xl font-bold text-center mb-4">
-            Achievements
-          </h2>
-          <ProjectsList achievements={profile?.achievements}/>
-        </div>
       </div>
 
       <Footer />

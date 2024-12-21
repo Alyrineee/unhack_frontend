@@ -4,6 +4,8 @@ import { Header } from "../components/Header";
 import Footer from "../components/Footer";
 import {useEffect, useState} from "react";
 import apiClient from "../apiClient.ts";
+import {Button} from "../components/Button.tsx";
+import Profile from "./Profile.tsx";
 
 
 interface Hackathon {
@@ -14,23 +16,58 @@ interface Hackathon {
   date_of_start: string;
   date_of_end: string;
   place: string;
+  owner: number;
   members: [];
 }
 
+interface Profile {
+  id: number;
+}
 const HackathonView = () => {
   const { id } = useParams(); // Получаем ID хакатона из URL
 
   const [hackathon, setHackathons] = useState<Hackathon>();
   useEffect(() => {
-    apiClient.get("/api/hackathon/"+id)
+    apiClient.get("/api/hackathons/view/"+id)
         .then((response) => setHackathons(response.data))
   }, [])
+  const handleDownload = async () => {
+    try {
+      const response = await apiClient.get(`/api/hackathons/${id}`, {
+        responseType: "blob", // Указываем, что ответ должен быть в виде Blob
+      });
 
+      // Создаем URL для Blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+
+      // Попробуем извлечь имя файла из заголовков, если оно есть
+      const contentDisposition = response.headers["content-disposition"];
+      const fileNameMatch = contentDisposition?.match(/filename="(.+)"/);
+      const fileName = fileNameMatch ? fileNameMatch[1] : "hackathon_info";
+
+      link.setAttribute("download", fileName); // Устанавливаем имя файла
+      document.body.appendChild(link);
+      link.click();
+
+      // Убираем временный объект
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Ошибка при загрузке файла", error);
+    }
+  };
+  const [profile, setProfile] = useState<Profile | null>(null);
+  useEffect(() => {
+    apiClient.get("/api/user/")
+        .then((response)=> setProfile(response.data))
+        .catch((error)=> console.log(error));
+  }, [])
   return (
     <div className="flex flex-col min-h-screen bg-white text-black">
       <Header />
       <div className="container mx-auto px-6 py-12">
-        {/* Название и основная информация */}
         <section className="mb-12">
           <h1 className="text-4xl font-bold text-purple-700">{hackathon?.name}</h1>
           <p className="text-gray-600 mt-2">{hackathon?.description}</p>
@@ -45,6 +82,25 @@ const HackathonView = () => {
               <strong>Participants:</strong> {hackathon?.members.length}
             </p>
           </div>
+          {!hackathon?.members.includes(profile?.id) ?(
+              <Button text="Записаться" onClick={() => {
+                apiClient.put(
+                    "/api/hackathons/join",
+                    {"hackaton_id": id}
+                ).then(()=> {location.reload()})
+              }
+              }></Button>
+          ) : hackathon?.owner == profile?.id ? (
+              <Button text="Скачать" onClick={handleDownload}></Button>
+          ): (
+              <Button text="Отписаться" onClick={() => {
+                apiClient.put(
+                    "/api/hackathons/join",
+                    {"hackaton_id": id}
+                ).then(()=> {location.reload()})
+              }
+              }></Button>
+          )}
         </section>
 
 

@@ -13,6 +13,8 @@ import HackathonView from "./pages/HackathonView";
 import ArticleView from "./pages/ArticleView";
 import AuthGuard from "./components/AuthGuard";
 
+import AddHackathon from "./pages/CreateHackathon";
+
 const AppRoutes = () => (
   <Router>
     <Routes>
@@ -52,6 +54,14 @@ const AppRoutes = () => (
         element={
           <AuthGuard>
             <HackathonsList />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path="/add_hackathon"
+        element={
+          <AuthGuard>
+            <AddHackathon />
           </AuthGuard>
         }
       />

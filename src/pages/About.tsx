@@ -1,11 +1,15 @@
 import { Header } from "../components/Header";
 import Footer from "../components/Footer";
 
+import { useTranslation } from "react-i18next";
+
 const About = () => {
+  const { t } = useTranslation();
+
   const teamMembers = [
-    { name: "John Doe", role: "Frontend Developer", bio: "Loves React and Tailwind." },
-    { name: "Jane Smith", role: "Backend Developer", bio: "Works with Node.js and databases." },
-    { name: "Mike Johnson", role: "Fullstack Developer", bio: "Combines frontend and backend expertise." },
+    { name: t("about.prog1"), role: "Fullstack Developer", bio: "Loves Django and React." },
+    { name: t("about.prog2"), role: "Backend Developer", bio: "Works with Node.js and databases." },
+    { name: t("about.prog3"), role: "Fullstack Developer", bio: "Combines frontend and backend expertise." },
   ];
 
   return (
@@ -13,19 +17,15 @@ const About = () => {
       <Header />
 
       <div className="container mx-auto px-6 py-12">
-        {/* О Проекте */}
         <section className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4">About the Project</h1>
+          <h1 className="text-4xl font-bold mb-4">{ t("about.aboutProject") }</h1>
           <p className="text-lg leading-relaxed max-w-3xl mx-auto">
-            Our platform is designed to help organize hackathons, connect people into teams,
-            and provide tools for publishing articles and ranking participants based on their
-            achievements and contributions.
+            { t("about.aboutProjectDescription") }
           </p>
         </section>
 
-        {/* Команда разработки */}
         <section>
-          <h2 className="text-3xl font-bold text-center mb-8">Meet the Team</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">{ t("about.teamTitle") }</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (
               <div

@@ -5,5 +5,13 @@
     "welcomeDescription": "welcome description",
     "goToMain": "Main",
     "goToAbout": "About"
+  },
+  "about": {
+    "aboutProject": "About the Project",
+    "aboutProjectDescription": "Our platform is designed to help organize hackathons, connect people into teams, and provide tools for publishing articles and ranking participants based on their achievements and contributions.",
+    "teamTitle": "Meet the Team",
+    "prog1": "Egor Golikov",
+    "prog2": "Oleg Demin",
+    "prog3": "Max Zhdanov"
   }
 }

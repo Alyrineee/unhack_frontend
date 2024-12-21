@@ -1,50 +1,25 @@
 import { Header } from "../components/Header";
 import Footer from "../components/Footer";
+import {useEffect, useState} from "react";
+import apiClient from "../apiClient.ts";
 
 interface Article {
-  id: number;
+  unique_link: string;
   title: string;
   author: string;
-  date: string;
-  description: string;
+  updated_at: string;
+  text: string;
 }
 
-const articles: Article[] = [
-  {
-    id: 1,
-    title: "How to Win Your Next Hackathon",
-    author: "Alice Johnson",
-    date: "Jan 5, 2024",
-    description:
-      "Learn the essential strategies and tips to dominate your next hackathon.",
-  },
-  {
-    id: 2,
-    title: "Building Strong Teams for Competitions",
-    author: "Bob Smith",
-    date: "Jan 10, 2024",
-    description:
-      "Discover how to assemble a team that will maximize your chances of success.",
-  },
-  {
-    id: 3,
-    title: "Top Tools for Hackathon Projects",
-    author: "Charlie Adams",
-    date: "Jan 15, 2024",
-    description:
-      "A list of tools that can speed up your development and help deliver quality projects.",
-  },
-  {
-    id: 4,
-    title: "Mastering Time Management at Hackathons",
-    author: "Diana Lee",
-    date: "Jan 20, 2024",
-    description:
-      "Tips to manage your time effectively and focus on what's important during a hackathon.",
-  },
-];
 
 const ArticlesList = () => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const truncateString = (str: string): string =>
+        str.length > 30 ? str.slice(0, 30) + '...' : str;
+  useEffect(() => {
+    apiClient.get("api/articles")
+        .then((response) => setArticles(response.data))
+  }, [])
   return (
     <div className="flex flex-col min-h-screen bg-white text-black">
 
@@ -61,18 +36,15 @@ const ArticlesList = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map((article) => (
             <div
-              key={article.id}
+              key={article.unique_link}
               className="bg-gray-100 rounded-lg p-6 hover:shadow-lg transition"
             >
               <h2 className="text-2xl font-semibold text-purple-700 mb-2">
                 {article.title}
               </h2>
-              <p className="text-gray-600 text-sm mb-4">
-                By {article.author} • {article.date}
-              </p>
-              <p className="text-gray-700 mb-4">{article.description}</p>
+              <p className="text-gray-700 mb-4">{truncateString(article.text)}</p>
               <a
-                href={`/articles/${article.id}`}
+                href={`/articles/${article.unique_link}`}
                 className="text-purple-500 hover:underline font-medium"
               >
                 Read more →

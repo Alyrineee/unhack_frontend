@@ -1,26 +1,32 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("accessToken")); // Проверка авторизации
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignOut = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setIsAuthenticated(false);
+    navigate("/login");
+  };
 
   return (
     <header>
       <nav className="w-full bg-gray-800 text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <Link
-            className="text-2xl font-bold select-none"
-            to={"/"}
-          >
+          <Link className="text-2xl font-bold select-none" to={"/"}>
             unhack
           </Link>
-          <div className="hidden md:flex gap-6">
+          <div className="hidden md:flex gap-6 items-center">
             <Link
               className={`select-none ${isActive("/hackathons") ? "text-purple-500 cursor-default" : "hover:underline"}`}
               to={"/hackathons"}
@@ -39,12 +45,48 @@ export const Header = () => {
             >
               About
             </Link>
-            <Link
-              className={`select-none ${isActive("/profile") ? "text-purple-500 cursor-default" : "hover:underline"}`}
-              to={"/profile"}
-            >
-              Profile
-            </Link>
+            {isAuthenticated ? (
+              <div className="relative">
+                <button
+                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                  className="relative z-10 focus:outline-none hover:underline"
+                >
+                  Profile
+                </button>
+                {isProfileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
+                    <Link
+                      to={"/profile"}
+                      className="block px-4 py-2 hover:bg-gray-100"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      View Profile
+                    </Link>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                      onClick={handleSignOut}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link
+                  className={`select-none ${isActive("/login") ? "text-purple-500 cursor-default" : "hover:underline"}`}
+                  to={"/login"}
+                >
+                  Login
+                </Link>
+                <Link
+                  className={`select-none ${isActive("/sign_up") ? "text-purple-500 cursor-default" : "hover:underline"}`}
+                  to={"/sign_up"}
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
             <LanguageSwitcher />
           </div>
           <button
@@ -78,13 +120,43 @@ export const Header = () => {
             >
               About
             </Link>
-            <Link
-              className={`select-none ${isActive("/profile") ? "text-purple-500" : "hover:underline"}`}
-              to={"/profile"}
-              onClick={() => setIsOpen(false)}
-            >
-              Profile
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  className="select-none hover:underline"
+                  to={"/profile"}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Profile
+                </Link>
+                <button
+                  className="select-none text-left hover:underline"
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleSignOut();
+                  }}
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  className={`select-none ${isActive("/login") ? "text-purple-500" : "hover:underline"}`}
+                  to={"/login"}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  className={`select-none ${isActive("/sign_up") ? "text-purple-500" : "hover:underline"}`}
+                  to={"/sign_up"}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
             <LanguageSwitcher />
           </div>
         )}

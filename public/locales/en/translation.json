@@ -1,9 +1,21 @@
 {
   "home": {
+    "welcome": "Welcome to Unhack",
+    "welcomeDescription": "Join hackathons, build amazing projects, connect with people, and climb the leaderboard. Publish articles to share your expertise with the community.",
+    "startBtn": "Get Started",
     "projectName": "unhack",
     "welcomeMessage": "Welcome to our platform!",
-    "welcomeDescription": "welcome description",
     "goToMain": "Main",
-    "goToAbout": "About"
+    "goToAbout": "About",
+    "topParticipants": "Top Participants",
+    "topOrganizers": "Top Organizers"
+  },
+  "about": {
+    "aboutProject": "About the Project",
+    "aboutProjectDescription": "Our platform is designed to help organize hackathons, connect people into teams, and provide tools for publishing articles and ranking participants based on their achievements and contributions.",
+    "teamTitle": "Meet the Team",
+    "prog1": "Egor Golikov",
+    "prog2": "Oleg Demin",
+    "prog3": "Max Zhdanov"
   }
 }

@@ -11,6 +11,7 @@ interface Hackathon {
   date_of_start: string;
   date_of_end: string;
   place: string;
+  unique_link: string,
 }
 
 
@@ -18,7 +19,7 @@ const HackathonsList = () => {
   const [hackathons, setHackathons] = useState<Hackathon[]>([]);
 
   useEffect(() => {
-    apiClient.get(`/api/hackathons/`)
+    apiClient.get(`/api/hackatons/`)
         .then((response) => setHackathons(response.data))
         .catch((error) => console.log(error));
   }, [])
@@ -37,9 +38,8 @@ const HackathonsList = () => {
       <section className="py-12 px-4 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {hackathons?.map((hackathon: Hackathon) => (
-              <a href={"hackathons/"+hackathon.id}>
+              <a href={"hackathons/"+hackathon.unique_link}>
                 <div
-                    key={hackathon.id}
                     className="bg-gray-100 rounded-lg p-6 shadow-sm hover:shadow-md transition"
 
                 >

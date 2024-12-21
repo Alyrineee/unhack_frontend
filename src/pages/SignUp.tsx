@@ -10,7 +10,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -54,11 +53,6 @@ const SignUp = () => {
       isValid = false;
     }
 
-    if (!phoneNumber) {
-      newErrors.phoneNumber = "Phone number is required.";
-      isValid = false;
-    }
-
     if (!password) {
       newErrors.password = "Password is required.";
       isValid = false;
@@ -88,7 +82,6 @@ const SignUp = () => {
         email,
         name,
         nickname,
-        phone_number: phoneNumber,
         is_organizer: false,
         is_participant: true,
         password,
@@ -130,12 +123,6 @@ const SignUp = () => {
               placeholder="Nickname"
               onChange={(e) => setNickname(e.target.value)}
               error={errors.nickname}
-            />
-            <InputBox
-              type="text"
-              placeholder="Phone Number"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              error={errors.phoneNumber}
             />
             <InputBox
               type="password"

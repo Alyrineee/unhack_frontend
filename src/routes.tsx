@@ -81,6 +81,14 @@ const AppRoutes = () => (
           </AuthGuard>
         }
       />
+        <Route
+            path="/add_hackathon"
+            element={
+                <AuthGuard>
+                    <AddHackathon />
+                </AuthGuard>
+            }
+        />
     </Routes>
   </Router>
 );

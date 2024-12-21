@@ -34,20 +34,20 @@ const HackathonView = () => {
   const handleDownload = async () => {
     try {
       const response = await apiClient.get(`/api/hackathons/${id}`, {
-        responseType: "blob", // Указываем, что ответ должен быть в виде Blob
+        responseType: "blob",
       });
 
-      // Создаем URL для Blob
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const blob = new Blob([response.data], { type: "text/csv" });
+
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
 
-      // Попробуем извлечь имя файла из заголовков, если оно есть
       const contentDisposition = response.headers["content-disposition"];
       const fileNameMatch = contentDisposition?.match(/filename="(.+)"/);
-      const fileName = fileNameMatch ? fileNameMatch[1] : "hackathon_info";
+      const fileName = fileNameMatch ? fileNameMatch[1] : "hackaton_api.csv";
 
-      link.setAttribute("download", fileName); // Устанавливаем имя файла
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
 
@@ -82,8 +82,8 @@ const HackathonView = () => {
               <strong>Participants:</strong> {hackathon?.members.length}
             </p>
           </div>
-          {!hackathon?.members.includes(profile?.id) ?(
-              <Button text="Записаться" onClick={() => {
+          {hackathon?.members.includes(profile?.id) ?(
+              <Button text="Отписаться" onClick={() => {
                 apiClient.put(
                     "/api/hackathons/join",
                     {"hackaton_id": id}
@@ -93,7 +93,7 @@ const HackathonView = () => {
           ) : hackathon?.owner == profile?.id ? (
               <Button text="Скачать" onClick={handleDownload}></Button>
           ): (
-              <Button text="Отписаться" onClick={() => {
+              <Button text="Записаться" onClick={() => {
                 apiClient.put(
                     "/api/hackathons/join",
                     {"hackaton_id": id}

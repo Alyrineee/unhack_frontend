@@ -95,7 +95,7 @@ const CreateHackathon = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await apiClient.post("/api/hackatons/", formData);
+      const response = await apiClient.post("/api/hackathons/", formData);
 
       if (response.status === 201) {
         navigate("/hackathons");

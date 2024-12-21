@@ -1,158 +1,107 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { InputBox } from "../components/InputBox";
-import { Button } from "../components/Button";
-import { Divider } from "../components/Divider";
+import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
-import apiClient from "../apiClient";
+import Footer from "../components/Footer";
+import { DividerMain } from "../components/DividerMain";
 
-const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+import { useTranslation } from "react-i18next";
 
-  const [errors, setErrors] = useState({
-    email: "",
-    name: "",
-    nickname: "",
-    phoneNumber: "",
-    password: "",
-    confirmPassword: "",
-  });
+interface Leader {
+  nickname: string;
+  participant_points: number;
+}
 
-  const navigate = useNavigate();
+const HomePage = () => {
+  const { t } = useTranslation();
 
-  const validateForm = () => {
-    const newErrors = {
-      email: "",
-      name: "",
-      nickname: "",
-      phoneNumber: "",
-      password: "",
-      confirmPassword: "",
-    };
-    let isValid = true;
+  const [organizers, setOrganizers] = useState<Leader[]>([]);
+  const [participants, setParticipants] = useState<Leader[]>([]);
 
-    if (!email) {
-      newErrors.email = "Email is required.";
-      isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Invalid email format.";
-      isValid = false;
-    }
+  useEffect(() => {
+    // Fetch data for top organizers
+    fetch("http://localhost:8000/api/rating/organizer_rating?page=1&amount=3")
+        .then((response) => response.json())
+        .then((data) => {
+          setOrganizers(data.results); // Set organizers in the state
+        })
+        .catch((error) => {
+          console.error("Error fetching organizers:", error);
+        });
 
-    if (!name) {
-      newErrors.name = "Name is required.";
-      isValid = false;
-    }
-
-    if (!nickname) {
-      newErrors.nickname = "Nickname is required.";
-      isValid = false;
-    }
-
-    if (!password) {
-      newErrors.password = "Password is required.";
-      isValid = false;
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
-      isValid = false;
-    }
-
-    if (!confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password.";
-      isValid = false;
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    try {
-      const response = await apiClient.post("/api/user/create/", {
-        email,
-        name,
-        nickname,
-        is_organizer: false,
-        is_participant: true,
-        password,
-      });
-
-      if (response.status === 201) {
-        navigate("/login");
-      }
-    } catch (error: any) {
-      console.error("Registration failed:", error.response?.data || error);
-    }
-  };
+    // Fetch data for top participants
+    fetch("http://localhost:8000/api/rating/participant_rating?page=1&amount=3")
+        .then((response) => response.json())
+        .then((data) => {
+          setParticipants(data.results); // Set participants in the state
+        })
+        .catch((error) => {
+          console.error("Error fetching participants:", error);
+        });
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
+      <div className="flex flex-col min-h-screen bg-white text-black">
+        <Header />
 
-      <div className="flex-1 flex items-center justify-center p-4">
-        <div className="bg-white w-full max-w-md shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-center mb-6">
-            Create Account
+        <section className="bg-purple-100 text-center py-12 px-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-purple-700">
+            { t("home.welcome") }
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+            { t("home.welcomeDescription") }
+          </p>
+          <div className="mt-6">
+            <a
+                href="/sign_up"
+                className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition duration-300"
+            >
+              { t("home.startBtn") }
+            </a>
+          </div>
+        </section>
+
+        <section className="bg-gray-50 py-12 px-4">
+          <h2 className="text-3xl font-bold text-center mb-6">
+            { t("home.topOrganizers") }
           </h2>
+          <ul className="max-w-md mx-auto space-y-4">
+            {organizers.map((leader, index) => (
+                <li
+                    key={index}
+                    className="flex justify-between bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition"
+                >
+                  <span className="font-medium">{leader.nickname}</span>
+                  <span className="font-semibold text-purple-600">
+                {leader.participant_points} pts
+              </span>
+                </li>
+            ))}
+          </ul>
+        </section>
 
-          <form className="space-y-4" onSubmit={handleSignUp}>
-            <InputBox
-              type="email"
-              placeholder="Email address"
-              onChange={(e) => setEmail(e.target.value)}
-              error={errors.email}
-            />
-            <InputBox
-              type="text"
-              placeholder="Full Name"
-              onChange={(e) => setName(e.target.value)}
-              error={errors.name}
-            />
-            <InputBox
-              type="text"
-              placeholder="Nickname"
-              onChange={(e) => setNickname(e.target.value)}
-              error={errors.nickname}
-            />
-            <InputBox
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              error={errors.password}
-            />
-            <InputBox
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              error={errors.confirmPassword}
-            />
+        <DividerMain />
 
-            <Button text="Continue" type="submit" />
-            <div className="text-center text-sm text-gray-500">
-              Already have an account?{" "}
-              <a href="/login" className="text-purple-600 hover:underline">
-                Login
-              </a>
-            </div>
+        <section className="bg-gray-50 py-12 px-4">
+          <h2 className="text-3xl font-bold text-center mb-6">
+            { t("home.topParticipants") }
+          </h2>
+          <ul className="max-w-md mx-auto space-y-4">
+            {participants.map((leader, index) => (
+                <li
+                    key={index}
+                    className="flex justify-between bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition"
+                >
+                  <span className="font-medium">{leader.nickname}</span>
+                  <span className="font-semibold text-purple-600">
+                {leader.participant_points} pts
+              </span>
+                </li>
+            ))}
+          </ul>
+        </section>
 
-            <Divider />
-
-            <Button text="Continue with GitHub" variant="secondary" />
-          </form>
-        </div>
+        <Footer />
       </div>
-    </div>
   );
 };
 
-export default SignUp;
+export default HomePage;
